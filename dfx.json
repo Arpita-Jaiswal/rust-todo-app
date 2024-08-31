@@ -1,0 +1,17 @@
+{
+  "canisters": {
+    "rust-todo-app-backend": {
+      "candid": "src/rust-todo-app-backend/rust-todo-app-backend.did",
+      "package": "rust-todo-app-backend",
+      "type": "rust"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
