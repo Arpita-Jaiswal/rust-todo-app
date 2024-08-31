@@ -1,3 +1,15 @@
+type TodoId = nat64;
+
+type Todo = record {
+  id: TodoId;
+  text: text;
+};
+
 service : {
-    "greet": (text) -> (text) query;
+  "add_todo": (text) -> (TodoId);
+  "get_todo_by_id": (TodoId) -> (opt Todo) query;
+  "get_all_todos": (nat64, nat64) -> (vec Todo) query;
+  "update_todo": (TodoId, text) -> (opt Todo);
+  "delete_todo_by_id": (TodoId) -> (opt Todo);
+  "greet": (text) -> (text) query;
 }
