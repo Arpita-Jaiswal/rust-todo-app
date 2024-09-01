@@ -27,8 +27,6 @@ pub(crate) fn delete_todo_by_id(id: todo_app::TodoId) -> Option<todo_app::Todo> 
     todo_app::TODOS.with(|todos| todos.borrow_mut().remove(&id))
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::delete_todo_by_id;

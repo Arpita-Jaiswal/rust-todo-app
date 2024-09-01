@@ -1,17 +1,14 @@
 extern crate self as todo_app;
 
 mod add_todo;
-mod get_todo_by_id;
-mod get_all_todos;
-mod update_todo;
 mod delete_todo_by_id;
-
+mod get_all_todos;
+mod get_todo_by_id;
+mod update_todo;
 
 /// `TodoId` is defined as a `u64` (unsigned 64-bit integer) and is used throughout the application
 /// to uniquely identify each todo item.
 type TodoId = u64;
-
-
 
 /// Represents a todo item in the application.
 ///
@@ -29,8 +26,6 @@ struct Todo {
     text: String,
 }
 
-
-
 // Thread-local storage for managing todos.
 //
 // The `TODOS` variable is a thread-local storage containing a `RefCell` wrapped `BTreeMap` that maps
@@ -39,6 +34,6 @@ struct Todo {
 //
 // The `NEXT_ID` variable keeps track of the next unique identifier to be assigned to a new todo item.
 thread_local! {
-    static TODOS: std::cell::RefCell<std::collections::BTreeMap<TodoId, Todo>> = std::cell::RefCell::new(std::collections::BTreeMap::new());
-    static NEXT_ID: std::cell::RefCell<TodoId> = std::cell::RefCell::new(0);
+    static TODOS: std::cell::RefCell<std::collections::BTreeMap<TodoId, Todo>> = const { std::cell::RefCell::new(std::collections::BTreeMap::new()) };
+    static NEXT_ID: std::cell::RefCell<TodoId> = const { std::cell::RefCell::new(0) };
 }

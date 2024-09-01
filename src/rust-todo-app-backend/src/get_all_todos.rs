@@ -36,13 +36,10 @@ pub(crate) fn get_all_todos(page: u64, limit: u64) -> Vec<todo_app::Todo> {
     })
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::get_all_todos;
     use todo_app::add_todo::add_todo;
-
 
     #[test]
     fn test_get_all_todos() {
@@ -51,7 +48,6 @@ mod tests {
         assert_eq!(todos.len(), 1);
         assert_eq!(todos[0].text, "Test TODO");
     }
-
 
     #[test]
     fn test_get_all_todos_with_offset() {
@@ -73,7 +69,6 @@ mod tests {
         let todos = get_all_todos(5, 1);
         assert_eq!(todos.len(), 0);
     }
-
 
     #[test]
     fn test_get_all_todos_with_offset_and_limit() {

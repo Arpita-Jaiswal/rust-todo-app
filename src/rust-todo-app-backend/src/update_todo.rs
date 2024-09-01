@@ -30,7 +30,7 @@ pub(crate) fn update_todo(id: todo_app::TodoId, text: String) -> Option<todo_app
 
         // Update the text of the todo with the given ID
         if let Some(todo) = todos.get_mut(&id) {
-            todo.text = text.clone();
+            todo.text = text;
             return Some(todo.clone());
         }
 
@@ -38,8 +38,6 @@ pub(crate) fn update_todo(id: todo_app::TodoId, text: String) -> Option<todo_app
         None
     })
 }
-
-
 
 #[cfg(test)]
 mod tests {

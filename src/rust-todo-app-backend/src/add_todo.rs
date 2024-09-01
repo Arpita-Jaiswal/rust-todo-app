@@ -26,9 +26,6 @@ pub(crate) fn add_todo(text: String) -> todo_app::TodoId {
     id
 }
 
-
-
-
 /// Generates the next unique ID for a todo item.
 ///
 /// This function increments a thread-local counter to ensure each todo item has a unique ID.
@@ -50,7 +47,6 @@ fn next_id() -> todo_app::TodoId {
         new_id
     })
 }
-
 
 /// Inserts a todo item into the collection.
 ///
@@ -74,11 +70,6 @@ fn insert_todo(id: todo_app::TodoId, todo: todo_app::Todo) {
     })
 }
 
-
-
-
-
-
 #[cfg(test)]
 mod tests {
     use super::add_todo;
@@ -88,5 +79,4 @@ mod tests {
         let id = add_todo("Test TODO".to_string());
         assert_eq!(id, 0);
     }
-
 }
