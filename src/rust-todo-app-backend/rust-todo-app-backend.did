@@ -11,5 +11,4 @@ service : {
   "get_all_todos": (nat64, nat64) -> (vec Todo) query;
   "update_todo": (TodoId, text) -> (opt Todo);
   "delete_todo_by_id": (TodoId) -> (opt Todo);
-  "greet": (text) -> (text) query;
 }
