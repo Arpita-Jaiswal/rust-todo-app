@@ -42,9 +42,9 @@ pub(crate) fn add_todo(text: String) -> todo_app::TodoId {
 /// ```
 fn next_id() -> todo_app::TodoId {
     todo_app::NEXT_ID.with(|id| {
-        let new_id = *id.borrow();
-        *id.borrow_mut() += 1;
-        new_id
+        let mut id = id.borrow_mut();
+        let new = *id.get() + 1;
+        id.set(new).unwrap()
     })
 }
 

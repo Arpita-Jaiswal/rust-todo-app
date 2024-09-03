@@ -26,9 +26,9 @@ struct Todo {
     text: String,
 }
 
-
 impl ic_stable_structures::Storable for Todo {
-    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+    const BOUND: ic_stable_structures::storable::Bound =
+        ic_stable_structures::storable::Bound::Unbounded;
 
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
         use candid::Encode;
@@ -71,5 +71,14 @@ thread_local! {
                 )
             )
         );
-    static NEXT_ID: std::cell::RefCell<TodoId> = const { std::cell::RefCell::new(0) };
+    static NEXT_ID: std::cell::RefCell<ic_stable_structures::StableCell<TodoId, Memory>> =
+        std::cell::RefCell::new(
+            ic_stable_structures::StableCell::init(
+                ic_stable_structures::RestrictedMemory::new(
+                    ic_stable_structures::DefaultMemoryImpl::default(),
+                    0..99
+                ),
+                0
+            ).unwrap()
+        );
 }

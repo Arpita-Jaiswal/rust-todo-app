@@ -36,10 +36,7 @@ pub(crate) fn update_todo(id: todo_app::TodoId, text: String) -> Option<todo_app
         // Update the text of the todo with the given ID
         let todo = todo_app::Todo { id, text };
         todos.insert(id, todo.clone());
-        Some(todo);
-
-
-        None
+        Some(todo)
     })
 }
 
