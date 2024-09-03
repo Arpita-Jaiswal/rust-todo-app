@@ -26,6 +26,25 @@ struct Todo {
     text: String,
 }
 
+
+impl ic_stable_structures::Storable for Todo {
+    const BOUND: ic_stable_structures::storable::Bound = ic_stable_structures::storable::Bound::Unbounded;
+
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        use candid::Encode;
+
+        std::borrow::Cow::Owned(Encode!(self).expect("Failed to serialize Todo"))
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        use candid::Decode;
+
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+}
+
+type Memory = ic_stable_structures::RestrictedMemory<ic_stable_structures::DefaultMemoryImpl>;
+
 // Thread-local storage for managing todos.
 //
 // The `TODOS` variable is a thread-local storage containing a `RefCell` wrapped `BTreeMap` that maps
@@ -34,6 +53,23 @@ struct Todo {
 //
 // The `NEXT_ID` variable keeps track of the next unique identifier to be assigned to a new todo item.
 thread_local! {
-    static TODOS: std::cell::RefCell<std::collections::BTreeMap<TodoId, Todo>> = const { std::cell::RefCell::new(std::collections::BTreeMap::new()) };
+    // Initialize a `StableBTreeMap`. We're providing the map a `RestrictedMemory`,
+    // which allows us to divide the stable memory into non-intersecting ranges
+    // so that we can store multiple stable structures if we later wish.
+    //
+    // In this case, this map is given the range [0, 99], so it has access to the first
+    // 100 pages in stable memory. Note that a page is 64KiB.
+    //
+    // Note that we can safely increase the range at any time (e.g. from 0..99 to 0..999)
+    // to give the map more space to grow.
+    static TODOS: std::cell::RefCell<ic_stable_structures::StableBTreeMap<TodoId, Todo, Memory>> =
+        std::cell::RefCell::new(
+            ic_stable_structures::StableBTreeMap::init(
+                ic_stable_structures::RestrictedMemory::new(
+                    ic_stable_structures::DefaultMemoryImpl::default(),
+                    0..99
+                )
+            )
+        );
     static NEXT_ID: std::cell::RefCell<TodoId> = const { std::cell::RefCell::new(0) };
 }

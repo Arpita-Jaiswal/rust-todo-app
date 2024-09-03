@@ -28,13 +28,17 @@ pub(crate) fn update_todo(id: todo_app::TodoId, text: String) -> Option<todo_app
     todo_app::TODOS.with(|todos| {
         let mut todos = todos.borrow_mut();
 
-        // Update the text of the todo with the given ID
-        if let Some(todo) = todos.get_mut(&id) {
-            todo.text = text;
-            return Some(todo.clone());
+        // Return None if no todo with the given ID exists
+        if !todos.contains_key(&id) {
+            return None;
         }
 
-        // Return None if no todo with the given ID exists
+        // Update the text of the todo with the given ID
+        let todo = todo_app::Todo { id, text };
+        todos.insert(id, todo.clone());
+        Some(todo);
+
+
         None
     })
 }
